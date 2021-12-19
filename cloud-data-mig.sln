@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31624.102
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "cloud-data-mig", "cloud-data-mig.csproj", "{EE09BD17-4B4E-4837-93F8-43FACC6027AB}"
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "mig-db", "database\mig-db\mig-db.sqlproj", "{3C9E3FD4-B27E-4D7B-A57E-753FBCD34EB1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,10 +11,12 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{EE09BD17-4B4E-4837-93F8-43FACC6027AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EE09BD17-4B4E-4837-93F8-43FACC6027AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EE09BD17-4B4E-4837-93F8-43FACC6027AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EE09BD17-4B4E-4837-93F8-43FACC6027AB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3C9E3FD4-B27E-4D7B-A57E-753FBCD34EB1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3C9E3FD4-B27E-4D7B-A57E-753FBCD34EB1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3C9E3FD4-B27E-4D7B-A57E-753FBCD34EB1}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{3C9E3FD4-B27E-4D7B-A57E-753FBCD34EB1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3C9E3FD4-B27E-4D7B-A57E-753FBCD34EB1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3C9E3FD4-B27E-4D7B-A57E-753FBCD34EB1}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
