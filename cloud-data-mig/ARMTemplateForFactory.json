@@ -20,7 +20,7 @@
 				"description": "Master pipeline",
 				"activities": [
 					{
-						"name": "SET_UID",
+						"name": "set_uid",
 						"type": "SetVariable",
 						"dependsOn": [],
 						"userProperties": [],
@@ -33,12 +33,12 @@
 						}
 					},
 					{
-						"name": "RUN_MIGRATION",
+						"name": "run_migration",
 						"description": "Run Parent Pipline",
 						"type": "ExecutePipeline",
 						"dependsOn": [
 							{
-								"activity": "SET_UID",
+								"activity": "set_uid",
 								"dependencyConditions": [
 									"Succeeded"
 								]
@@ -57,6 +57,26 @@
 									"type": "Expression"
 								}
 							}
+						}
+					},
+					{
+						"name": "capture_error",
+						"type": "Fail",
+						"dependsOn": [
+							{
+								"activity": "run_migration",
+								"dependencyConditions": [
+									"Failed"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"message": {
+								"value": "@activity('run_migration').output",
+								"type": "Expression"
+							},
+							"errorCode": "100"
 						}
 					}
 				],
