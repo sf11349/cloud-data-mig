@@ -60,7 +60,7 @@
 						}
 					},
 					{
-						"name": "error",
+						"name": "raise_error",
 						"type": "Wait",
 						"dependsOn": [
 							{
@@ -99,24 +99,339 @@
 				"description": "Parent Pipline",
 				"activities": [
 					{
-						"name": "test",
-						"type": "WebActivity",
+						"name": "prepare",
+						"type": "ExecutePipeline",
 						"dependsOn": [],
-						"policy": {
-							"timeout": "0.00:01:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
 						"userProperties": [],
 						"typeProperties": {
-							"url": {
-								"value": "@pipeline().parameters.UID",
-								"type": "Expression"
+							"pipeline": {
+								"referenceName": "01_prepare",
+								"type": "PipelineReference"
 							},
-							"method": "GET",
-							"headers": {}
+							"waitOnCompletion": true,
+							"parameters": {
+								"UID": {
+									"value": "@pipeline().parameters.UID",
+									"type": "Expression"
+								}
+							}
+						}
+					},
+					{
+						"name": "extract",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "prepare",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "02_extract",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {
+								"UID": {
+									"value": "@pipeline().parameters.UID",
+									"type": "Expression"
+								}
+							}
+						}
+					},
+					{
+						"name": "transform",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "extract",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "03_transform",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {
+								"UID": {
+									"value": "@pipeline().parameters.UID",
+									"type": "Expression"
+								}
+							}
+						}
+					},
+					{
+						"name": "load",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "transform",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "04_load",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {
+								"UID": {
+									"value": "@pipeline().parameters.UID",
+									"type": "Expression"
+								}
+							}
+						}
+					},
+					{
+						"name": "transmit",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "load",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "05_transmit",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {
+								"UID": {
+									"value": "@pipeline().parameters.UID",
+									"type": "Expression"
+								}
+							}
+						}
+					},
+					{
+						"name": "persist",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "transmit",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "06_presist",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {
+								"UID": {
+									"value": "@pipeline().parameters.UID",
+									"type": "Expression"
+								}
+							}
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"parameters": {
+					"UID": {
+						"type": "string"
+					}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/01_prepare')]",
+				"[concat(variables('factoryId'), '/pipelines/02_extract')]",
+				"[concat(variables('factoryId'), '/pipelines/03_transform')]",
+				"[concat(variables('factoryId'), '/pipelines/04_load')]",
+				"[concat(variables('factoryId'), '/pipelines/05_transmit')]",
+				"[concat(variables('factoryId'), '/pipelines/06_presist')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/01_prepare')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "Child Pipeline",
+				"activities": [
+					{
+						"name": "Wait1",
+						"type": "Wait",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"waitTimeInSeconds": 1
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"parameters": {
+					"UID": {
+						"type": "string"
+					}
+				},
+				"annotations": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/02_extract')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "Child Pipeline",
+				"activities": [
+					{
+						"name": "Wait1",
+						"type": "Wait",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"waitTimeInSeconds": 1
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"parameters": {
+					"UID": {
+						"type": "string"
+					}
+				},
+				"annotations": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/03_transform')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "Child Pipeline",
+				"activities": [
+					{
+						"name": "Wait1",
+						"type": "Wait",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"waitTimeInSeconds": 1
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"parameters": {
+					"UID": {
+						"type": "string"
+					}
+				},
+				"annotations": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/04_load')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "Child Pipeline",
+				"activities": [
+					{
+						"name": "Wait1",
+						"type": "Wait",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"waitTimeInSeconds": 1
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"parameters": {
+					"UID": {
+						"type": "string"
+					}
+				},
+				"annotations": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/05_transmit')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "Child Pipeline",
+				"activities": [
+					{
+						"name": "Wait1",
+						"type": "Wait",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"waitTimeInSeconds": 1
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"parameters": {
+					"UID": {
+						"type": "string"
+					}
+				},
+				"annotations": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/06_presist')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "Child Pipeline",
+				"activities": [
+					{
+						"name": "Wait1",
+						"type": "Wait",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"waitTimeInSeconds": 1
 						}
 					}
 				],
