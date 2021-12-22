@@ -44,7 +44,7 @@
 				}
 			},
 			{
-				"name": "error",
+				"name": "raise_error",
 				"type": "Wait",
 				"dependsOn": [
 					{
