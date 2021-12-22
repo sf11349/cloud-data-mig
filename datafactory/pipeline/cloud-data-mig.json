@@ -1,0 +1,70 @@
+{
+	"name": "cloud-data-mig",
+	"properties": {
+		"description": "Master pipeline",
+		"activities": [
+			{
+				"name": "set_uid",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "UID",
+					"value": {
+						"value": "@pipeline().RunId",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "run_migration",
+				"description": "Run Parent Pipline",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "set_uid",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "00_mig",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"UID": {
+							"value": "@variables('UID')",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "raise_error",
+				"type": "Wait",
+				"dependsOn": [
+					{
+						"activity": "run_migration",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"waitTimeInSeconds": 1
+				}
+			}
+		],
+		"variables": {
+			"UID": {
+				"type": "String"
+			}
+		},
+		"annotations": []
+	}
+}

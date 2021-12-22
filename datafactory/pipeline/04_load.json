@@ -1,0 +1,23 @@
+{
+	"name": "04_load",
+	"properties": {
+		"description": "Child Pipeline",
+		"activities": [
+			{
+				"name": "Wait1",
+				"type": "Wait",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"waitTimeInSeconds": 1
+				}
+			}
+		],
+		"parameters": {
+			"UID": {
+				"type": "string"
+			}
+		},
+		"annotations": []
+	}
+}
