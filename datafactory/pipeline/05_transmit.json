@@ -1,7 +1,7 @@
 {
-	"name": "00_mig",
+	"name": "05_transmit",
 	"properties": {
-		"description": "Parent Pipline",
+		"description": "Child Pipeline",
 		"parameters": {
 			"UID": {
 				"type": "string"
