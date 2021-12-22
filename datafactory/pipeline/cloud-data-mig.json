@@ -1,0 +1,18 @@
+{
+	"name": "cloud-data-mig",
+	"properties": {
+		"description": "Master pipeline",
+		"activities": [
+			{
+				"name": "start",
+				"type": "Wait",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"waitTimeInSeconds": 1
+				}
+			}
+		],
+		"annotations": []
+	}
+}
