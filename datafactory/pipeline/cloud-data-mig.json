@@ -31,7 +31,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"pipeline": {
-						"referenceName": "00_MIGRATE",
+						"referenceName": "00_mig",
 						"type": "PipelineReference"
 					},
 					"waitOnCompletion": true,

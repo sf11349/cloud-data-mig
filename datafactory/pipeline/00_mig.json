@@ -1,6 +1,7 @@
 {
-	"name": "00_MIGRATE",
+	"name": "00_mig",
 	"properties": {
+		"description": "Parent Pipline",
 		"activities": [
 			{
 				"name": "Wait1",
