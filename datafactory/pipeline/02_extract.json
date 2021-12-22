@@ -4,12 +4,70 @@
 		"description": "Child Pipeline",
 		"activities": [
 			{
-				"name": "Wait1",
-				"type": "Wait",
+				"name": "get_extract_tables_list",
+				"type": "SqlServerStoredProcedure",
 				"dependsOn": [],
+				"policy": {
+					"timeout": "0.00:10:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
 				"userProperties": [],
 				"typeProperties": {
-					"waitTimeInSeconds": 1
+					"storedProcedureName": "[adf].[getTableList]",
+					"storedProcedureParameters": {
+						"SchemaName": {
+							"value": "extract",
+							"type": "String"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "ls_db_mig",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "load_tables",
+				"type": "ForEach",
+				"dependsOn": [
+					{
+						"activity": "get_extract_tables_list",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@activity('get_extract_tables_list').output",
+						"type": "Expression"
+					},
+					"activities": [
+						{
+							"name": "Web1",
+							"type": "WebActivity",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"url": {
+									"value": "@item()",
+									"type": "Expression"
+								},
+								"method": "GET"
+							}
+						}
+					]
 				}
 			}
 		],
