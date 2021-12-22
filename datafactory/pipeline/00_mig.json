@@ -4,25 +4,9 @@
 		"description": "Parent Pipline",
 		"activities": [
 			{
-				"name": "Wait1",
-				"type": "Wait",
-				"dependsOn": [],
-				"userProperties": [],
-				"typeProperties": {
-					"waitTimeInSeconds": 1
-				}
-			},
-			{
-				"name": "Web1",
+				"name": "test",
 				"type": "WebActivity",
-				"dependsOn": [
-					{
-						"activity": "Wait1",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
+				"dependsOn": [],
 				"policy": {
 					"timeout": "0.00:01:00",
 					"retry": 0,
