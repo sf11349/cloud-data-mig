@@ -30,7 +30,17 @@
 				],
 				"userProperties": [],
 				"typeProperties": {
-					"waitOnCompletion": true
+					"pipeline": {
+						"referenceName": "00_MIGRATE",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"UID": {
+							"value": "@variables('UID')",
+							"type": "Expression"
+						}
+					}
 				}
 			}
 		],
