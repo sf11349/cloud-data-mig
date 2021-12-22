@@ -1,0 +1,6 @@
+﻿CREATE TABLE load.Service
+(
+	Id INT PRIMARY KEY,
+	Code NVARCHAR(10),
+	Name NVARCHAR(250)
+)

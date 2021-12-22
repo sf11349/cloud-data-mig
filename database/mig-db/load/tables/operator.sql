@@ -1,0 +1,8 @@
+﻿CREATE TABLE load.Operator
+(
+	Id INT PRIMARY KEY,
+	Code NVARCHAR(10),
+	Name NVARCHAR(250),
+	Address NVARCHAR(250)
+
+)

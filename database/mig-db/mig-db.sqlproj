@@ -7,7 +7,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectVersion>4.1</ProjectVersion>
     <ProjectGuid>{3c9e3fd4-b27e-4d7b-a57e-753fbcd34eb1}</ProjectGuid>
-    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql130DatabaseSchemaProvider</DSP>
+    <DSP>Microsoft.Data.Tools.Schema.Sql.SqlAzureV12DatabaseSchemaProvider</DSP>
     <OutputType>Database</OutputType>
     <RootPath>
     </RootPath>
@@ -56,5 +56,38 @@
   <Import Condition="'$(SQLDBExtensionsRefPath)' == ''" Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
   <ItemGroup>
     <Folder Include="Properties" />
+    <Folder Include="schemas" />
+    <Folder Include="extract" />
+    <Folder Include="extract\tables" />
+    <Folder Include="transform" />
+    <Folder Include="transform\views" />
+    <Folder Include="adf" />
+    <Folder Include="adf\storedprocs" />
+    <Folder Include="rowmap" />
+    <Folder Include="rowmap\tables" />
+    <Folder Include="adf\views" />
+    <Folder Include="load" />
+    <Folder Include="load\tables" />
+  </ItemGroup>
+  <ItemGroup>
+    <Build Include="Schemas\extract.sql" />
+    <Build Include="Schemas\transform.sql" />
+    <Build Include="Schemas\load.sql" />
+    <Build Include="Schemas\adf.sql" />
+    <Build Include="Schemas\rowmap.sql" />
+    <Build Include="extract\tables\trains_list.sql" />
+    <Build Include="extract\tables\operators_list.sql" />
+    <Build Include="extract\tables\stations_list.sql" />
+    <Build Include="extract\tables\passangers_count.sql" />
+    <Build Include="rowmap\tables\operator.sql" />
+    <Build Include="rowmap\tables\station.sql" />
+    <Build Include="rowmap\tables\train.sql" />
+    <Build Include="load\tables\Station.sql" />
+    <Build Include="load\tables\Operator.sql" />
+    <Build Include="load\tables\Train.sql" />
+    <Build Include="load\tables\PassangersCount.sql" />
+    <Build Include="extract\tables\services_list.sql" />
+    <Build Include="rowmap\tables\service.sql" />
+    <Build Include="load\tables\Service.sql" />
   </ItemGroup>
 </Project>
