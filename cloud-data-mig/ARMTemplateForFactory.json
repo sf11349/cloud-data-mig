@@ -20,18 +20,98 @@
 				"description": "Master pipeline",
 				"activities": [
 					{
-						"name": "start",
-						"type": "Wait",
+						"name": "SET_UID",
+						"type": "SetVariable",
 						"dependsOn": [],
 						"userProperties": [],
 						"typeProperties": {
-							"waitTimeInSeconds": 1
+							"variableName": "UID",
+							"value": {
+								"value": "@pipeline().RunId",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "RUN_MIGRATION",
+						"description": "Run Parent Pipline",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "SET_UID",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "00_mig",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {
+								"UID": {
+									"value": "@variables('UID')",
+									"type": "Expression"
+								}
+							}
 						}
 					}
 				],
 				"policy": {
 					"elapsedTimeMetric": {},
 					"cancelAfter": {}
+				},
+				"variables": {
+					"UID": {
+						"type": "String"
+					}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/00_mig')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/00_mig')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "Parent Pipline",
+				"activities": [
+					{
+						"name": "test",
+						"type": "WebActivity",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.00:01:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"url": {
+								"value": "@pipeline().parameters.UID",
+								"type": "Expression"
+							},
+							"method": "GET",
+							"headers": {}
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"parameters": {
+					"UID": {
+						"type": "string"
+					}
 				},
 				"annotations": []
 			},
