@@ -4,15 +4,41 @@
 		"description": "Master pipeline",
 		"activities": [
 			{
-				"name": "start",
-				"type": "Wait",
+				"name": "SET_UID",
+				"type": "SetVariable",
 				"dependsOn": [],
 				"userProperties": [],
 				"typeProperties": {
-					"waitTimeInSeconds": 1
+					"variableName": "UID",
+					"value": {
+						"value": "@pipeline().RunId",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "RUN_MIGRATION",
+				"description": "Run Parent Pipline",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "SET_UID",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"waitOnCompletion": true
 				}
 			}
 		],
+		"variables": {
+			"UID": {
+				"type": "String"
+			}
+		},
 		"annotations": []
 	}
 }
