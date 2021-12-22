@@ -102,8 +102,8 @@
 						}
 					},
 					{
-						"name": "capture_error",
-						"type": "Fail",
+						"name": "error",
+						"type": "Wait",
 						"dependsOn": [
 							{
 								"activity": "run_migration",
@@ -114,11 +114,7 @@
 						],
 						"userProperties": [],
 						"typeProperties": {
-							"message": {
-								"value": "@activity('run_migration').output",
-								"type": "Expression"
-							},
-							"errorCode": "100"
+							"waitTimeInSeconds": 1
 						}
 					}
 				],
