@@ -10,6 +10,10 @@
 		"ls_db_mig_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'ls_db_mig'"
+		},
+		"ls_storage_mig_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'ls_storage_mig'"
 		}
 	},
 	"variables": {
@@ -249,11 +253,11 @@
 							},
 							"activities": [
 								{
-									"name": "Web1",
-									"type": "WebActivity",
+									"name": "load_csv_to_table",
+									"type": "Copy",
 									"dependsOn": [],
 									"policy": {
-										"timeout": "7.00:00:00",
+										"timeout": "0.00:10:00",
 										"retry": 0,
 										"retryIntervalInSeconds": 30,
 										"secureOutput": false,
@@ -261,13 +265,60 @@
 									},
 									"userProperties": [],
 									"typeProperties": {
-										"url": {
-											"value": "@item().TABLE_NAME",
-											"type": "Expression"
+										"source": {
+											"type": "DelimitedTextSource",
+											"storeSettings": {
+												"type": "AzureBlobStorageReadSettings",
+												"recursive": true,
+												"enablePartitionDiscovery": false
+											},
+											"formatSettings": {
+												"type": "DelimitedTextReadSettings"
+											}
 										},
-										"method": "GET",
-										"headers": {}
-									}
+										"sink": {
+											"type": "AzureSqlSink"
+										},
+										"enableStaging": false,
+										"translator": {
+											"type": "TabularTranslator",
+											"typeConversion": true,
+											"typeConversionSettings": {
+												"allowDataTruncation": true,
+												"treatBooleanAsNumber": false
+											}
+										}
+									},
+									"inputs": [
+										{
+											"referenceName": "ds_stroage_mig_csv",
+											"type": "DatasetReference",
+											"parameters": {
+												"container": "cloud-data-mig",
+												"directory": "extract",
+												"file": {
+													"value": "@item().TABLE_NAME",
+													"type": "Expression"
+												}
+											}
+										}
+									],
+									"outputs": [
+										{
+											"referenceName": "ds_db_mig_table",
+											"type": "DatasetReference",
+											"parameters": {
+												"schema": {
+													"value": "@item().TABLE_SCHEMA",
+													"type": "Expression"
+												},
+												"table": {
+													"value": "@item().TABLE_NAME",
+													"type": "Expression"
+												}
+											}
+										}
+									]
 								}
 							]
 						}
@@ -318,7 +369,9 @@
 				"annotations": []
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/ds_db_mig_query')]"
+				"[concat(variables('factoryId'), '/datasets/ds_db_mig_query')]",
+				"[concat(variables('factoryId'), '/datasets/ds_stroage_mig_csv')]",
+				"[concat(variables('factoryId'), '/datasets/ds_db_mig_table')]"
 			]
 		},
 		{
@@ -521,6 +574,24 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/ds_db_mig_query')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_db_mig",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [],
+				"typeProperties": {}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_db_mig')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/ls_db_mig')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
@@ -534,7 +605,68 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/ds_db_mig_query')]",
+			"name": "[concat(parameters('factoryName'), '/ls_storage_mig')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobStorage",
+				"typeProperties": {
+					"connectionString": "[parameters('ls_storage_mig_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_stroage_mig_csv')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_storage_mig",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"container": {
+						"type": "string"
+					},
+					"directory": {
+						"type": "string"
+					},
+					"file": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": {
+							"value": "@concat(dataset().file,'.csv')",
+							"type": "Expression"
+						},
+						"folderPath": {
+							"value": "@dataset().directory",
+							"type": "Expression"
+						},
+						"container": {
+							"value": "@dataset().container",
+							"type": "Expression"
+						}
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_storage_mig')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_db_mig_table')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -542,10 +674,27 @@
 					"referenceName": "ls_db_mig",
 					"type": "LinkedServiceReference"
 				},
+				"parameters": {
+					"schema": {
+						"type": "string"
+					},
+					"table": {
+						"type": "string"
+					}
+				},
 				"annotations": [],
 				"type": "AzureSqlTable",
 				"schema": [],
-				"typeProperties": {}
+				"typeProperties": {
+					"schema": {
+						"value": "@dataset().schema",
+						"type": "Expression"
+					},
+					"table": {
+						"value": "@dataset().table",
+						"type": "Expression"
+					}
+				}
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/ls_db_mig')]"
