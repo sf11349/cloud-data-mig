@@ -291,7 +291,7 @@
 									},
 									"inputs": [
 										{
-											"referenceName": "ds_stroage_mig_csv",
+											"referenceName": "ds_storage_mig_csv",
 											"type": "DatasetReference",
 											"parameters": {
 												"container": "cloud-data-mig",
@@ -370,7 +370,7 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/ds_db_mig_query')]",
-				"[concat(variables('factoryId'), '/datasets/ds_stroage_mig_csv')]",
+				"[concat(variables('factoryId'), '/datasets/ds_storage_mig_csv')]",
 				"[concat(variables('factoryId'), '/datasets/ds_db_mig_table')]"
 			]
 		},
@@ -618,7 +618,7 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/ds_stroage_mig_csv')]",
+			"name": "[concat(parameters('factoryName'), '/ds_storage_mig_csv')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -657,6 +657,7 @@
 					},
 					"columnDelimiter": ",",
 					"escapeChar": "\\",
+					"firstRowAsHeader": true,
 					"quoteChar": "\""
 				},
 				"schema": []
