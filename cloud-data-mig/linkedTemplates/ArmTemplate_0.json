@@ -180,7 +180,7 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/ds_mig_query')]",
+			"name": "[concat(parameters('factoryName'), '/ds_db_mig_query')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -272,7 +272,7 @@
 								"partitionOption": "None"
 							},
 							"dataset": {
-								"referenceName": "ds_mig_query",
+								"referenceName": "ds_db_mig_query",
 								"type": "DatasetReference",
 								"parameters": {}
 							},
@@ -292,7 +292,7 @@
 				"annotations": []
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/ds_mig_query')]"
+				"[concat(variables('factoryId'), '/datasets/ds_db_mig_query')]"
 			]
 		},
 		{
