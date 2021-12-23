@@ -7,6 +7,10 @@
 			"metadata": "Data Factory name",
 			"defaultValue": "cloud-data-mig"
 		},
+		"ls_db_mig_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'ls_db_mig'"
+		},
 		"containerUri": {
 			"type": "string",
 			"metadata": "URI to storage account containing linked ARM templates"
@@ -33,6 +37,9 @@
 				"parameters": {
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
+					},
+					"ls_db_mig_connectionString": {
+						"value": "[parameters('ls_db_mig_connectionString')]"
 					}
 				}
 			},

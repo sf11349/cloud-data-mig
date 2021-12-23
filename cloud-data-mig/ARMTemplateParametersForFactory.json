@@ -4,6 +4,9 @@
 	"parameters": {
 		"factoryName": {
 			"value": "cloud-data-mig"
+		},
+		"ls_db_mig_connectionString": {
+			"value": ""
 		}
 	}
 }

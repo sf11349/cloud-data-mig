@@ -6,91 +6,16 @@
 			"type": "string",
 			"metadata": "Data Factory name",
 			"defaultValue": "cloud-data-mig"
+		},
+		"ls_db_mig_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'ls_db_mig'"
 		}
 	},
 	"variables": {
 		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
 	},
 	"resources": [
-		{
-			"name": "[concat(parameters('factoryName'), '/cloud-data-mig')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"description": "Master pipeline",
-				"activities": [
-					{
-						"name": "set_uid",
-						"type": "SetVariable",
-						"dependsOn": [],
-						"userProperties": [],
-						"typeProperties": {
-							"variableName": "UID",
-							"value": {
-								"value": "@pipeline().RunId",
-								"type": "Expression"
-							}
-						}
-					},
-					{
-						"name": "run_migration",
-						"description": "Run Parent Pipline",
-						"type": "ExecutePipeline",
-						"dependsOn": [
-							{
-								"activity": "set_uid",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"userProperties": [],
-						"typeProperties": {
-							"pipeline": {
-								"referenceName": "00_mig",
-								"type": "PipelineReference"
-							},
-							"waitOnCompletion": true,
-							"parameters": {
-								"UID": {
-									"value": "@variables('UID')",
-									"type": "Expression"
-								}
-							}
-						}
-					},
-					{
-						"name": "raise_error",
-						"type": "Wait",
-						"dependsOn": [
-							{
-								"activity": "run_migration",
-								"dependencyConditions": [
-									"Failed"
-								]
-							}
-						],
-						"userProperties": [],
-						"typeProperties": {
-							"waitTimeInSeconds": 1
-						}
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {},
-					"cancelAfter": {}
-				},
-				"variables": {
-					"UID": {
-						"type": "String"
-					}
-				},
-				"annotations": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/pipelines/00_mig')]"
-			]
-		},
 		{
 			"name": "[concat(parameters('factoryName'), '/00_mig')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
@@ -306,12 +231,71 @@
 				"description": "Child Pipeline",
 				"activities": [
 					{
-						"name": "Wait1",
-						"type": "Wait",
+						"name": "get_extract_tables_list",
+						"type": "SqlServerStoredProcedure",
 						"dependsOn": [],
+						"policy": {
+							"timeout": "0.00:10:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
 						"userProperties": [],
 						"typeProperties": {
-							"waitTimeInSeconds": 1
+							"storedProcedureName": "[[adf].[getTableList]",
+							"storedProcedureParameters": {
+								"SchemaName": {
+									"value": "extract",
+									"type": "String"
+								}
+							}
+						},
+						"linkedServiceName": {
+							"referenceName": "ls_db_mig",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "load_tables",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "get_extract_tables_list",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('get_extract_tables_list').output",
+								"type": "Expression"
+							},
+							"activities": [
+								{
+									"name": "Web1",
+									"type": "WebActivity",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "7.00:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"url": {
+											"value": "@{item().TABLE_NAME}",
+											"type": "Expression"
+										},
+										"method": "GET",
+										"headers": {}
+									}
+								}
+							]
 						}
 					}
 				],
@@ -326,7 +310,9 @@
 				},
 				"annotations": []
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_db_mig')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/03_transform')]",
@@ -445,6 +431,98 @@
 					}
 				},
 				"annotations": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/cloud-data-mig')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "Master pipeline",
+				"activities": [
+					{
+						"name": "set_uid",
+						"type": "SetVariable",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "UID",
+							"value": {
+								"value": "@pipeline().RunId",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "run_migration",
+						"description": "Run Parent Pipline",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "set_uid",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "00_mig",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {
+								"UID": {
+									"value": "@variables('UID')",
+									"type": "Expression"
+								}
+							}
+						}
+					},
+					{
+						"name": "raise_error",
+						"type": "Wait",
+						"dependsOn": [
+							{
+								"activity": "run_migration",
+								"dependencyConditions": [
+									"Failed"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"waitTimeInSeconds": 1
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"variables": {
+					"UID": {
+						"type": "String"
+					}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/00_mig')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ls_db_mig')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureSqlDatabase",
+				"typeProperties": {
+					"connectionString": "[parameters('ls_db_mig_connectionString')]"
+				}
 			},
 			"dependsOn": []
 		}
