@@ -70,7 +70,7 @@
 						"partitionOption": "None"
 					},
 					"dataset": {
-						"referenceName": "ds_mig_query",
+						"referenceName": "ds_db_mig_query",
 						"type": "DatasetReference"
 					},
 					"firstRowOnly": false

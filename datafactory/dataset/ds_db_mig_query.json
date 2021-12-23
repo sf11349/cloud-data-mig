@@ -1,5 +1,5 @@
 {
-	"name": "ds_mig_query",
+	"name": "ds_db_mig_query",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ls_db_mig",
