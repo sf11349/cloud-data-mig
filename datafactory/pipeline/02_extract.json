@@ -64,7 +64,10 @@
 									"type": "DatasetReference",
 									"parameters": {
 										"container": "cloud-data-mig",
-										"directory": "extract",
+										"directory": {
+											"value": "@concat('prepare/',pipeline().parameters.UID)",
+											"type": "Expression"
+										},
 										"file": {
 											"value": "@item().TABLE_NAME",
 											"type": "Expression"
