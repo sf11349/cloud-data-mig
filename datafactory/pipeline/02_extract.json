@@ -61,7 +61,7 @@
 							"userProperties": [],
 							"typeProperties": {
 								"url": {
-									"value": "@item()",
+									"value": "@{item().TABLE_NAME}",
 									"type": "Expression"
 								},
 								"method": "GET"
