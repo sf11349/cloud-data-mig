@@ -205,12 +205,23 @@
 				"description": "Child Pipeline",
 				"activities": [
 					{
-						"name": "Wait1",
-						"type": "Wait",
+						"name": "truncate_mig_db",
+						"type": "SqlServerStoredProcedure",
 						"dependsOn": [],
+						"policy": {
+							"timeout": "0.00:10:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
 						"userProperties": [],
 						"typeProperties": {
-							"waitTimeInSeconds": 1
+							"storedProcedureName": "[[adf].[trancateMigDb]"
+						},
+						"linkedServiceName": {
+							"referenceName": "ls_db_mig",
+							"type": "LinkedServiceReference"
 						}
 					}
 				],
@@ -225,7 +236,9 @@
 				},
 				"annotations": []
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_db_mig')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/02_extract')]",
