@@ -1,4 +1,4 @@
-﻿CREATE TABLE extract.trainslist
+﻿CREATE TABLE extract.trains_list
 (
 	 train_code NVARCHAR(10) PRIMARY KEY,
 	 train_category NVARCHAR(20),

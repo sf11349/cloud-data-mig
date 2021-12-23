@@ -90,5 +90,6 @@
     <Build Include="rowmap\tables\service.sql" />
     <Build Include="load\tables\Service.sql" />
     <Build Include="adf\storedprocs\getTableList.sql" />
+    <Build Include="adf\storedprocs\trancateMigDb.sql" />
   </ItemGroup>
 </Project>
