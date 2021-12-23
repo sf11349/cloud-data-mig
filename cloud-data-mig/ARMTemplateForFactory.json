@@ -270,7 +270,7 @@
 						"userProperties": [],
 						"typeProperties": {
 							"items": {
-								"value": "@activity('get_extract_tables_list').output",
+								"value": "@activity('get_extract_tables_list').output.value",
 								"type": "Expression"
 							},
 							"activities": [
@@ -288,7 +288,7 @@
 									"userProperties": [],
 									"typeProperties": {
 										"url": {
-											"value": "@{item().TABLE_NAME}",
+											"value": "@item().TABLE_NAME",
 											"type": "Expression"
 										},
 										"method": "GET",
