@@ -1,0 +1,12 @@
+{
+	"name": "ds_db_mig_query",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_db_mig",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": []
+	}
+}
