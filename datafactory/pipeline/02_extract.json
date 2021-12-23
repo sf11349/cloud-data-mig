@@ -60,7 +60,7 @@
 							},
 							"inputs": [
 								{
-									"referenceName": "ds_stroage_mig_csv",
+									"referenceName": "ds_storage_mig_csv",
 									"type": "DatasetReference",
 									"parameters": {
 										"container": "cloud-data-mig",
