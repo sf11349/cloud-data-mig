@@ -1,5 +1,5 @@
 {
-	"name": "05_transmit",
+	"name": "04_transmit",
 	"properties": {
 		"description": "Child Pipeline",
 		"activities": [
