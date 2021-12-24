@@ -225,7 +225,7 @@
 						}
 					},
 					{
-						"name": "get_extract_files",
+						"name": "get_extract_csv_files",
 						"type": "Lookup",
 						"dependsOn": [],
 						"policy": {
@@ -258,11 +258,11 @@
 						}
 					},
 					{
-						"name": "copy_extract_to_prepare",
+						"name": "copy_extract_csvs_to_input",
 						"type": "ForEach",
 						"dependsOn": [
 							{
-								"activity": "get_extract_files",
+								"activity": "get_extract_csv_files",
 								"dependencyConditions": [
 									"Succeeded"
 								]
@@ -271,7 +271,7 @@
 						"userProperties": [],
 						"typeProperties": {
 							"items": {
-								"value": "@activity('get_extract_files').output.value",
+								"value": "@activity('get_extract_csv_files').output.value",
 								"type": "Expression"
 							},
 							"activities": [
@@ -341,7 +341,7 @@
 											"parameters": {
 												"container": "cloud-data-mig",
 												"directory": {
-													"value": "@concat('prepare/',pipeline().parameters.UID)",
+													"value": "@concat('input/',pipeline().parameters.UID,'extract')",
 													"type": "Expression"
 												},
 												"file": {
@@ -442,7 +442,7 @@
 											"parameters": {
 												"container": "cloud-data-mig",
 												"directory": {
-													"value": "@concat('prepare/',pipeline().parameters.UID)",
+													"value": "@concat('input/',pipeline().parameters.UID,'extract')",
 													"type": "Expression"
 												},
 												"file": {
@@ -741,30 +741,39 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/ls_db_mig')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"name": "[concat(parameters('factoryName'), '/ds_db_mig_table')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_db_mig",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"schema": {
+						"type": "string"
+					},
+					"table": {
+						"type": "string"
+					}
+				},
 				"annotations": [],
-				"type": "AzureSqlDatabase",
+				"type": "AzureSqlTable",
+				"schema": [],
 				"typeProperties": {
-					"connectionString": "[parameters('ls_db_mig_connectionString')]"
+					"schema": {
+						"value": "@dataset().schema",
+						"type": "Expression"
+					},
+					"table": {
+						"value": "@dataset().table",
+						"type": "Expression"
+					}
 				}
 			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/ls_storage_mig')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "AzureBlobStorage",
-				"typeProperties": {
-					"connectionString": "[parameters('ls_storage_mig_connectionString')]"
-				}
-			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_db_mig')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/ds_storage_mig_csv')]",
@@ -816,39 +825,30 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/ds_db_mig_table')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
+			"name": "[concat(parameters('factoryName'), '/ls_db_mig')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
 			"properties": {
-				"linkedServiceName": {
-					"referenceName": "ls_db_mig",
-					"type": "LinkedServiceReference"
-				},
-				"parameters": {
-					"schema": {
-						"type": "string"
-					},
-					"table": {
-						"type": "string"
-					}
-				},
 				"annotations": [],
-				"type": "AzureSqlTable",
-				"schema": [],
+				"type": "AzureSqlDatabase",
 				"typeProperties": {
-					"schema": {
-						"value": "@dataset().schema",
-						"type": "Expression"
-					},
-					"table": {
-						"value": "@dataset().table",
-						"type": "Expression"
-					}
+					"connectionString": "[parameters('ls_db_mig_connectionString')]"
 				}
 			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/ls_db_mig')]"
-			]
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ls_storage_mig')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobStorage",
+				"typeProperties": {
+					"connectionString": "[parameters('ls_storage_mig_connectionString')]"
+				}
+			},
+			"dependsOn": []
 		}
 	]
 }

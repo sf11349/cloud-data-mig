@@ -185,6 +185,41 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/ds_db_mig_table')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_db_mig",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"schema": {
+						"type": "string"
+					},
+					"table": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": {
+						"value": "@dataset().schema",
+						"type": "Expression"
+					},
+					"table": {
+						"value": "@dataset().table",
+						"type": "Expression"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_db_mig')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/ds_storage_mig_csv')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -234,41 +269,6 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/ds_db_mig_table')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "ls_db_mig",
-					"type": "LinkedServiceReference"
-				},
-				"parameters": {
-					"schema": {
-						"type": "string"
-					},
-					"table": {
-						"type": "string"
-					}
-				},
-				"annotations": [],
-				"type": "AzureSqlTable",
-				"schema": [],
-				"typeProperties": {
-					"schema": {
-						"value": "@dataset().schema",
-						"type": "Expression"
-					},
-					"table": {
-						"value": "@dataset().table",
-						"type": "Expression"
-					}
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/ls_db_mig')]"
-			]
-		},
-		{
 			"name": "[concat(parameters('factoryName'), '/01_prepare')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
@@ -296,7 +296,7 @@
 						}
 					},
 					{
-						"name": "get_extract_files",
+						"name": "get_extract_csv_files",
 						"type": "Lookup",
 						"dependsOn": [],
 						"policy": {
@@ -329,11 +329,11 @@
 						}
 					},
 					{
-						"name": "copy_extract_to_prepare",
+						"name": "copy_extract_csvs_to_input",
 						"type": "ForEach",
 						"dependsOn": [
 							{
-								"activity": "get_extract_files",
+								"activity": "get_extract_csv_files",
 								"dependencyConditions": [
 									"Succeeded"
 								]
@@ -342,7 +342,7 @@
 						"userProperties": [],
 						"typeProperties": {
 							"items": {
-								"value": "@activity('get_extract_files').output.value",
+								"value": "@activity('get_extract_csv_files').output.value",
 								"type": "Expression"
 							},
 							"activities": [
@@ -412,7 +412,7 @@
 											"parameters": {
 												"container": "cloud-data-mig",
 												"directory": {
-													"value": "@concat('prepare/',pipeline().parameters.UID)",
+													"value": "@concat('input/',pipeline().parameters.UID,'extract')",
 													"type": "Expression"
 												},
 												"file": {
@@ -513,7 +513,7 @@
 											"parameters": {
 												"container": "cloud-data-mig",
 												"directory": {
-													"value": "@concat('prepare/',pipeline().parameters.UID)",
+													"value": "@concat('input/',pipeline().parameters.UID,'extract')",
 													"type": "Expression"
 												},
 												"file": {
