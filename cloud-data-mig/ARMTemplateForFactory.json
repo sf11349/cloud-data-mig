@@ -138,7 +138,7 @@
 						"userProperties": [],
 						"typeProperties": {
 							"pipeline": {
-								"referenceName": "05_presist",
+								"referenceName": "05_persist",
 								"type": "PipelineReference"
 							},
 							"waitOnCompletion": true,
@@ -167,7 +167,7 @@
 				"[concat(variables('factoryId'), '/pipelines/02_extract')]",
 				"[concat(variables('factoryId'), '/pipelines/03_merge')]",
 				"[concat(variables('factoryId'), '/pipelines/04_transmit')]",
-				"[concat(variables('factoryId'), '/pipelines/05_presist')]"
+				"[concat(variables('factoryId'), '/pipelines/05_persist')]"
 			]
 		},
 		{
@@ -840,19 +840,134 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/05_presist')]",
+			"name": "[concat(parameters('factoryName'), '/05_persist')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"description": "Child Pipeline",
 				"activities": [
 					{
-						"name": "Wait1",
-						"type": "Wait",
-						"dependsOn": [],
+						"name": "load_persist_tables",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "get_persist_tables_List",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
 						"userProperties": [],
 						"typeProperties": {
-							"waitTimeInSeconds": 1
+							"items": {
+								"value": "@activity('get_persist_tables_List').output.value",
+								"type": "Expression"
+							},
+							"activities": [
+								{
+									"name": "load_rowmap_db_to_csv_table",
+									"type": "Copy",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "0.00:10:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"source": {
+											"type": "AzureSqlSource",
+											"queryTimeout": "02:00:00",
+											"partitionOption": "None"
+										},
+										"sink": {
+											"type": "DelimitedTextSink",
+											"storeSettings": {
+												"type": "AzureBlobStorageWriteSettings"
+											},
+											"formatSettings": {
+												"type": "DelimitedTextWriteSettings",
+												"quoteAllText": true,
+												"fileExtension": ".txt"
+											}
+										},
+										"enableStaging": false,
+										"translator": {
+											"type": "TabularTranslator",
+											"typeConversion": true,
+											"typeConversionSettings": {
+												"allowDataTruncation": true,
+												"treatBooleanAsNumber": false
+											}
+										}
+									},
+									"inputs": [
+										{
+											"referenceName": "ds_db_mig_table",
+											"type": "DatasetReference",
+											"parameters": {
+												"schema": {
+													"value": "@item().TABLE_SCHEMA",
+													"type": "Expression"
+												},
+												"table": {
+													"value": "@item().TABLE_NAME",
+													"type": "Expression"
+												}
+											}
+										}
+									],
+									"outputs": [
+										{
+											"referenceName": "ds_storage_mig_csv",
+											"type": "DatasetReference",
+											"parameters": {
+												"container": "cloud-data-mig",
+												"directory": "persist",
+												"file": {
+													"value": "@item().TABLE_NAME",
+													"type": "Expression"
+												}
+											}
+										}
+									]
+								}
+							]
+						}
+					},
+					{
+						"name": "get_persist_tables_List",
+						"type": "Lookup",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.00:10:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderStoredProcedureName": "[[adf].[getTableList]",
+								"storedProcedureParameters": {
+									"SchemaName": {
+										"type": "String",
+										"value": "rowmap"
+									}
+								},
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "ds_db_mig_query",
+								"type": "DatasetReference",
+								"parameters": {}
+							},
+							"firstRowOnly": false
 						}
 					}
 				],
@@ -867,7 +982,11 @@
 				},
 				"annotations": []
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/ds_db_mig_query')]",
+				"[concat(variables('factoryId'), '/datasets/ds_db_mig_table')]",
+				"[concat(variables('factoryId'), '/datasets/ds_storage_mig_csv')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/cloud-data-mig')]",
