@@ -42,7 +42,7 @@
 						"storedProcedureParameters": {
 							"SchemaName": {
 								"type": "String",
-								"value": "extract"
+								"value": "staging"
 							}
 						},
 						"queryTimeout": "02:00:00",
