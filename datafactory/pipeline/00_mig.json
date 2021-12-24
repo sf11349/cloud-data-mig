@@ -62,7 +62,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"pipeline": {
-						"referenceName": "03_transform",
+						"referenceName": "03_transform_load",
 						"type": "PipelineReference"
 					},
 					"waitOnCompletion": true,
@@ -87,10 +87,6 @@
 				],
 				"userProperties": [],
 				"typeProperties": {
-					"pipeline": {
-						"referenceName": "04_load",
-						"type": "PipelineReference"
-					},
 					"waitOnCompletion": true,
 					"parameters": {
 						"UID": {
@@ -114,7 +110,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"pipeline": {
-						"referenceName": "05_transmit",
+						"referenceName": "04_transmit",
 						"type": "PipelineReference"
 					},
 					"waitOnCompletion": true,
