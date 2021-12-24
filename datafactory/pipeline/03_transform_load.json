@@ -1,5 +1,5 @@
 {
-	"name": "03_transform",
+	"name": "03_transform_load",
 	"properties": {
 		"description": "Child Pipeline",
 		"activities": [
