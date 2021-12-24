@@ -268,7 +268,10 @@
 									"type": "DatasetReference",
 									"parameters": {
 										"container": "cloud-data-mig",
-										"directory": "persist/rowmap",
+										"directory": {
+											"value": "@concat('persist/',item().TABLE_SCHEMA)",
+											"type": "Expression"
+										},
 										"file": {
 											"value": "@item().TABLE_NAME",
 											"type": "Expression"
