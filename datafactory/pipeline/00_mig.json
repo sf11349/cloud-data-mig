@@ -114,7 +114,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"pipeline": {
-						"referenceName": "06_presist",
+						"referenceName": "05_presist",
 						"type": "PipelineReference"
 					},
 					"waitOnCompletion": true,
