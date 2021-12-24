@@ -65,7 +65,7 @@
 									"parameters": {
 										"container": "cloud-data-mig",
 										"directory": {
-											"value": "@concat('prepare/',pipeline().parameters.UID)",
+											"value": "@concat('input/',pipeline().parameters.UID,'extract')",
 											"type": "Expression"
 										},
 										"file": {
