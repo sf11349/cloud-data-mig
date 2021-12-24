@@ -24,7 +24,7 @@
 				}
 			},
 			{
-				"name": "get_extract_files",
+				"name": "get_extract_csv_files",
 				"type": "Lookup",
 				"dependsOn": [],
 				"policy": {
@@ -60,7 +60,7 @@
 				"type": "ForEach",
 				"dependsOn": [
 					{
-						"activity": "get_extract_files",
+						"activity": "get_extract_csv_files",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -69,7 +69,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"items": {
-						"value": "@activity('get_extract_files').output.value",
+						"value": "@activity('get_extract_csv_files').output.value",
 						"type": "Expression"
 					},
 					"activities": [
@@ -139,7 +139,7 @@
 									"parameters": {
 										"container": "cloud-data-mig",
 										"directory": {
-											"value": "@concat('prepare/',pipeline().parameters.UID)",
+											"value": "@concat('input/',pipeline().parameters.UID,'extract')",
 											"type": "Expression"
 										},
 										"file": {
