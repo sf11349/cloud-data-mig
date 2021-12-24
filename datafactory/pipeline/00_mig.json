@@ -49,7 +49,7 @@
 				}
 			},
 			{
-				"name": "transform",
+				"name": "merge",
 				"type": "ExecutePipeline",
 				"dependsOn": [
 					{
@@ -75,33 +75,11 @@
 				}
 			},
 			{
-				"name": "load",
-				"type": "ExecutePipeline",
-				"dependsOn": [
-					{
-						"activity": "transform",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
-				"userProperties": [],
-				"typeProperties": {
-					"waitOnCompletion": true,
-					"parameters": {
-						"UID": {
-							"value": "@pipeline().parameters.UID",
-							"type": "Expression"
-						}
-					}
-				}
-			},
-			{
 				"name": "transmit",
 				"type": "ExecutePipeline",
 				"dependsOn": [
 					{
-						"activity": "load",
+						"activity": "merge",
 						"dependencyConditions": [
 							"Succeeded"
 						]
