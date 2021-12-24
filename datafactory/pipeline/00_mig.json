@@ -62,7 +62,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"pipeline": {
-						"referenceName": "03_transform_load",
+						"referenceName": "03_merge",
 						"type": "PipelineReference"
 					},
 					"waitOnCompletion": true,
