@@ -82,7 +82,10 @@
 									"type": "DatasetReference",
 									"parameters": {
 										"container": "cloud-data-mig",
-										"directory": "persist",
+										"directory": {
+											"value": "@concat('persist/',item().TABLE_NAME)",
+											"type": "Expression"
+										},
 										"file": {
 											"value": "@item().TABLE_NAME",
 											"type": "Expression"
