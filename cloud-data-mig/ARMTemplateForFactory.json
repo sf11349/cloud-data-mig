@@ -926,7 +926,7 @@
 											"parameters": {
 												"container": "cloud-data-mig",
 												"directory": {
-													"value": "@concat('persist/',item().TABLE_NAME)",
+													"value": "@concat('persist/',item().TABLE_SCHEMA)",
 													"type": "Expression"
 												},
 												"file": {
