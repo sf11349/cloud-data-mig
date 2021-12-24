@@ -56,7 +56,7 @@
 				}
 			},
 			{
-				"name": "copy_extract_to_prepare",
+				"name": "copy_extract_csvs_to_input",
 				"type": "ForEach",
 				"dependsOn": [
 					{
