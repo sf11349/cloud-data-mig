@@ -74,7 +74,7 @@
 					},
 					"activities": [
 						{
-							"name": "copy_csv_extract_to_prepare",
+							"name": "copy_csv_extract_to_input",
 							"type": "Copy",
 							"dependsOn": [],
 							"policy": {
@@ -139,7 +139,7 @@
 									"parameters": {
 										"container": "cloud-data-mig",
 										"directory": {
-											"value": "@concat('input/',pipeline().parameters.UID,'extract')",
+											"value": "@concat('input/',pipeline().parameters.UID,'/extract')",
 											"type": "Expression"
 										},
 										"file": {
