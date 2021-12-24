@@ -296,7 +296,7 @@
 						}
 					},
 					{
-						"name": "get_extract_csv_files",
+						"name": "get_staging_csv_files",
 						"type": "Lookup",
 						"dependsOn": [],
 						"policy": {
@@ -314,7 +314,7 @@
 								"storedProcedureParameters": {
 									"SchemaName": {
 										"type": "String",
-										"value": "extract"
+										"value": "staging"
 									}
 								},
 								"queryTimeout": "02:00:00",
@@ -329,11 +329,11 @@
 						}
 					},
 					{
-						"name": "copy_extract_csvs_to_input",
+						"name": "copy_staging_csvs_to_input",
 						"type": "ForEach",
 						"dependsOn": [
 							{
-								"activity": "get_extract_csv_files",
+								"activity": "get_staging_csv_files",
 								"dependencyConditions": [
 									"Succeeded"
 								]
@@ -342,12 +342,12 @@
 						"userProperties": [],
 						"typeProperties": {
 							"items": {
-								"value": "@activity('get_extract_csv_files').output.value",
+								"value": "@activity('get_staging_csv_files').output.value",
 								"type": "Expression"
 							},
 							"activities": [
 								{
-									"name": "copy_csv_extract_to_input",
+									"name": "copy_csv_staging_to_input",
 									"type": "Copy",
 									"dependsOn": [],
 									"policy": {
@@ -412,7 +412,7 @@
 											"parameters": {
 												"container": "cloud-data-mig",
 												"directory": {
-													"value": "@concat('input/',pipeline().parameters.UID,'/extract')",
+													"value": "@concat('input/',pipeline().parameters.UID,'/',item().TABLE_SCHEMA)",
 													"type": "Expression"
 												},
 												"file": {
@@ -452,11 +452,11 @@
 				"description": "Child Pipeline",
 				"activities": [
 					{
-						"name": "load_tables",
+						"name": "load_staging_tables",
 						"type": "ForEach",
 						"dependsOn": [
 							{
-								"activity": "get_tables_List",
+								"activity": "get_staging_tables_List",
 								"dependencyConditions": [
 									"Succeeded"
 								]
@@ -465,12 +465,12 @@
 						"userProperties": [],
 						"typeProperties": {
 							"items": {
-								"value": "@activity('get_tables_List').output.value",
+								"value": "@activity('get_staging_tables_List').output.value",
 								"type": "Expression"
 							},
 							"activities": [
 								{
-									"name": "load_csv_to_table",
+									"name": "load_staging_csv_to_db_table",
 									"type": "Copy",
 									"dependsOn": [],
 									"policy": {
@@ -544,7 +544,7 @@
 						}
 					},
 					{
-						"name": "get_tables_List",
+						"name": "get_staging_tables_List",
 						"type": "Lookup",
 						"dependsOn": [],
 						"policy": {
@@ -562,7 +562,7 @@
 								"storedProcedureParameters": {
 									"SchemaName": {
 										"type": "String",
-										"value": "extract"
+										"value": "staging"
 									}
 								},
 								"queryTimeout": "02:00:00",
