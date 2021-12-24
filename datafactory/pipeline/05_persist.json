@@ -4,7 +4,7 @@
 		"description": "Child Pipeline",
 		"activities": [
 			{
-				"name": "load_presist_tables",
+				"name": "load_persist_tables",
 				"type": "ForEach",
 				"dependsOn": [
 					{
@@ -17,12 +17,12 @@
 				"userProperties": [],
 				"typeProperties": {
 					"items": {
-						"value": "@activity('get_staging_tables_List').output.value",
+						"value": "@activity('get_persist_tables_List').output.value",
 						"type": "Expression"
 					},
 					"activities": [
 						{
-							"name": "load_staging_csv_to_db_table",
+							"name": "load_rowmap_db_to_csv_table",
 							"type": "Copy",
 							"dependsOn": [],
 							"policy": {
@@ -35,18 +35,20 @@
 							"userProperties": [],
 							"typeProperties": {
 								"source": {
-									"type": "DelimitedTextSource",
-									"storeSettings": {
-										"type": "AzureBlobStorageReadSettings",
-										"recursive": true,
-										"enablePartitionDiscovery": false
-									},
-									"formatSettings": {
-										"type": "DelimitedTextReadSettings"
-									}
+									"type": "AzureSqlSource",
+									"queryTimeout": "02:00:00",
+									"partitionOption": "None"
 								},
 								"sink": {
-									"type": "AzureSqlSink"
+									"type": "DelimitedTextSink",
+									"storeSettings": {
+										"type": "AzureBlobStorageWriteSettings"
+									},
+									"formatSettings": {
+										"type": "DelimitedTextWriteSettings",
+										"quoteAllText": true,
+										"fileExtension": ".txt"
+									}
 								},
 								"enableStaging": false,
 								"translator": {
@@ -60,23 +62,6 @@
 							},
 							"inputs": [
 								{
-									"referenceName": "ds_storage_mig_csv",
-									"type": "DatasetReference",
-									"parameters": {
-										"container": "cloud-data-mig",
-										"directory": {
-											"value": "@concat('input/',pipeline().parameters.UID,'/',item().TABLE_SCHEMA)",
-											"type": "Expression"
-										},
-										"file": {
-											"value": "@item().TABLE_NAME",
-											"type": "Expression"
-										}
-									}
-								}
-							],
-							"outputs": [
-								{
 									"referenceName": "ds_db_mig_table",
 									"type": "DatasetReference",
 									"parameters": {
@@ -85,6 +70,20 @@
 											"type": "Expression"
 										},
 										"table": {
+											"value": "@item().TABLE_NAME",
+											"type": "Expression"
+										}
+									}
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "ds_storage_mig_csv",
+									"type": "DatasetReference",
+									"parameters": {
+										"container": "cloud-data-mig",
+										"directory": "persist",
+										"file": {
 											"value": "@item().TABLE_NAME",
 											"type": "Expression"
 										}
