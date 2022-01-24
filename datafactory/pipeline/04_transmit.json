@@ -1,5 +1,5 @@
 {
-	"name": "04_load",
+	"name": "04_transmit",
 	"properties": {
 		"description": "Child Pipeline",
 		"activities": [

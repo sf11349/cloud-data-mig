@@ -1,0 +1,94 @@
+{
+	"name": "03_merge",
+	"properties": {
+		"description": "Child Pipeline",
+		"activities": [
+			{
+				"name": "merge_operator",
+				"type": "SqlServerStoredProcedure",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.00:10:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"storedProcedureName": "[adf].[mergeOperator]"
+				},
+				"linkedServiceName": {
+					"referenceName": "ls_db_mig",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "merge_service",
+				"type": "SqlServerStoredProcedure",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.00:10:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"storedProcedureName": "[adf].[mergeService]"
+				},
+				"linkedServiceName": {
+					"referenceName": "ls_db_mig",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "merge_station",
+				"type": "SqlServerStoredProcedure",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.00:10:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"storedProcedureName": "[adf].[mergeStation]"
+				},
+				"linkedServiceName": {
+					"referenceName": "ls_db_mig",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "merge_train",
+				"type": "SqlServerStoredProcedure",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.00:10:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"storedProcedureName": "[adf].[mergeTrain]"
+				},
+				"linkedServiceName": {
+					"referenceName": "ls_db_mig",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"parameters": {
+			"UID": {
+				"type": "string"
+			}
+		},
+		"annotations": []
+	}
+}

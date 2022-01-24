@@ -49,7 +49,7 @@
 				}
 			},
 			{
-				"name": "transform",
+				"name": "merge",
 				"type": "ExecutePipeline",
 				"dependsOn": [
 					{
@@ -62,33 +62,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"pipeline": {
-						"referenceName": "03_transform",
-						"type": "PipelineReference"
-					},
-					"waitOnCompletion": true,
-					"parameters": {
-						"UID": {
-							"value": "@pipeline().parameters.UID",
-							"type": "Expression"
-						}
-					}
-				}
-			},
-			{
-				"name": "load",
-				"type": "ExecutePipeline",
-				"dependsOn": [
-					{
-						"activity": "transform",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
-				"userProperties": [],
-				"typeProperties": {
-					"pipeline": {
-						"referenceName": "04_load",
+						"referenceName": "03_merge",
 						"type": "PipelineReference"
 					},
 					"waitOnCompletion": true,
@@ -105,7 +79,7 @@
 				"type": "ExecutePipeline",
 				"dependsOn": [
 					{
-						"activity": "load",
+						"activity": "merge",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -114,7 +88,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"pipeline": {
-						"referenceName": "05_transmit",
+						"referenceName": "04_transmit",
 						"type": "PipelineReference"
 					},
 					"waitOnCompletion": true,
@@ -140,7 +114,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"pipeline": {
-						"referenceName": "06_presist",
+						"referenceName": "05_persist",
 						"type": "PipelineReference"
 					},
 					"waitOnCompletion": true,
