@@ -1,4 +1,4 @@
-﻿CREATE TABLE extract.operators_list
+﻿CREATE TABLE staging.operators_list
 (
 	operator_code NVARCHAR(10) PRIMARY KEY,
 	operator_name NVARCHAR(50),

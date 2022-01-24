@@ -1,4 +1,4 @@
-﻿CREATE TABLE extract.stations_list
+﻿CREATE TABLE staging.stations_list
 (
 	station_code NVARCHAR(10) PRIMARY KEY,
 	station_name  NVARCHAR(50),

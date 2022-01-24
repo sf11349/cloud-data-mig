@@ -57,8 +57,8 @@
   <ItemGroup>
     <Folder Include="Properties" />
     <Folder Include="schemas" />
-    <Folder Include="extract" />
-    <Folder Include="extract\tables" />
+    <Folder Include="staging" />
+    <Folder Include="staging\tables" />
     <Folder Include="transform" />
     <Folder Include="transform\views" />
     <Folder Include="adf" />
@@ -68,17 +68,18 @@
     <Folder Include="adf\views" />
     <Folder Include="load" />
     <Folder Include="load\tables" />
+    <Folder Include="transform\storedprocs" />
   </ItemGroup>
   <ItemGroup>
-    <Build Include="Schemas\extract.sql" />
+    <Build Include="schemas\staging.sql" />
     <Build Include="Schemas\transform.sql" />
     <Build Include="Schemas\load.sql" />
     <Build Include="Schemas\adf.sql" />
     <Build Include="Schemas\rowmap.sql" />
-    <Build Include="extract\tables\trains_list.sql" />
-    <Build Include="extract\tables\operators_list.sql" />
-    <Build Include="extract\tables\stations_list.sql" />
-    <Build Include="extract\tables\passangers_count.sql" />
+    <Build Include="staging\tables\trains_list.sql" />
+    <Build Include="staging\tables\operators_list.sql" />
+    <Build Include="staging\tables\stations_list.sql" />
+    <Build Include="staging\tables\passangers_count.sql" />
     <Build Include="rowmap\tables\operator.sql" />
     <Build Include="rowmap\tables\station.sql" />
     <Build Include="rowmap\tables\train.sql" />
@@ -86,10 +87,26 @@
     <Build Include="load\tables\Operator.sql" />
     <Build Include="load\tables\Train.sql" />
     <Build Include="load\tables\PassangersCount.sql" />
-    <Build Include="extract\tables\services_list.sql" />
+    <Build Include="staging\tables\services_list.sql" />
     <Build Include="rowmap\tables\service.sql" />
     <Build Include="load\tables\Service.sql" />
     <Build Include="adf\storedprocs\getTableList.sql" />
     <Build Include="adf\storedprocs\trancateMigDb.sql" />
+    <Build Include="transform\storedprocs\mergeOperator.sql" />
+    <Build Include="transform\views\Operator.sql" />
+    <Build Include="adf\storedprocs\mergeOperator.sql" />
+    <Build Include="transform\views\Service.sql" />
+    <Build Include="transform\storedprocs\mergeService.sql" />
+    <Build Include="adf\storedprocs\mergeService.sql" />
+    <Build Include="transform\views\Station.sql" />
+    <Build Include="adf\storedprocs\mergeStation.sql" />
+    <Build Include="transform\storedprocs\mergeStation.sql" />
+    <Build Include="transform\views\station_raw.sql" />
+    <Build Include="transform\views\train_raw.sql" />
+    <Build Include="transform\storedprocs\mergeTrain.sql" />
+    <Build Include="transform\views\Train.sql" />
+    <Build Include="adf\storedprocs\mergeTrain.sql" />
+    <Build Include="transform\views\operator_raw.sql" />
+    <Build Include="transform\views\service_raw.sql" />
   </ItemGroup>
 </Project>

@@ -1,4 +1,4 @@
-﻿CREATE TABLE extract.passangers_count
+﻿CREATE TABLE staging.passangers_count
 (
 	count_id BIGINT PRIMARY KEY,
 	operator_code NVARCHAR(10),

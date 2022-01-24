@@ -6,11 +6,11 @@ AS
 	TRUNCATE TABLE load.PassangersCount;
 	TRUNCATE TABLE load.Station;
 	TRUNCATE TABLE load.Train;
-	TRUNCATE TABLE extract.operators_list;
-	TRUNCATE TABLE extract.stations_list;
-	TRUNCATE TABLE extract.services_list;
-	TRUNCATE TABLE extract.passangers_count;
-	TRUNCATE TABLE extract.trains_list;
+	TRUNCATE TABLE staging.operators_list;
+	TRUNCATE TABLE staging.stations_list;
+	TRUNCATE TABLE staging.services_list;
+	TRUNCATE TABLE staging.passangers_count;
+	TRUNCATE TABLE staging.trains_list;
 	TRUNCATE TABLE rowmap.operator;
 	TRUNCATE TABLE rowmap.station;
 	TRUNCATE TABLE rowmap.train;
