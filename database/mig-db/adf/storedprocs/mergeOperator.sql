@@ -1,4 +1,16 @@
-﻿CREATE PROCEDURE adf.mergeOperator
-AS
-	EXECUTE transform.mergeOperator
-RETURN 0
+﻿
+CREATE PROCEDURE adf.mergeOperator
+  AS 
+  SET XACT_ABORT, NOCOUNT ON;
+  BEGIN TRY 
+    BEGIN TRANSACTION
+        -- Start
+         EXECUTE transform.mergeOperator
+        -- Finish
+
+    COMMIT TRANSACTION
+  END TRY
+  BEGIN CATCH
+    IF(@@TRANCOUNT >0) ROLLBACK TRANSACTION;
+    RETURN 55555
+  END CATCH;
