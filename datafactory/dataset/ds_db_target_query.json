@@ -1,0 +1,12 @@
+{
+	"name": "ds_db_target_query",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_db_target",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": []
+	}
+}
