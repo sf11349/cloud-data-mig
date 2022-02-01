@@ -938,7 +938,7 @@
 				"description": "Child Pipeline",
 				"activities": [
 					{
-						"name": "merge_Operator",
+						"name": "upload_Operator",
 						"type": "Copy",
 						"dependsOn": [],
 						"policy": {
