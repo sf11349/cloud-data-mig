@@ -162,6 +162,51 @@
 							"referenceName": "ls_db_mig",
 							"type": "LinkedServiceReference"
 						}
+					},
+					{
+						"name": "merge_passagners_count",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [
+							{
+								"activity": "merge_operator",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							},
+							{
+								"activity": "merge_service",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							},
+							{
+								"activity": "merge_station",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							},
+							{
+								"activity": "merge_train",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.00:10:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[adf].[mergePassangersCount]"
+						},
+						"linkedServiceName": {
+							"referenceName": "ls_db_mig",
+							"type": "LinkedServiceReference"
+						}
 					}
 				],
 				"policy": {
