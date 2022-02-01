@@ -5,6 +5,7 @@
 		"activities": [
 			{
 				"name": "set_uid",
+				"description": "Unique ID for the whole pipeline run",
 				"type": "SetVariable",
 				"dependsOn": [],
 				"userProperties": [],
