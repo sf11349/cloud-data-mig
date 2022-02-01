@@ -1,0 +1,8 @@
+﻿CREATE TABLE dbo.Train
+(
+	Id INT IDENTITY(1,1) PRIMARY KEY,
+	Code NVARCHAR(10),
+	Name NVARCHAR(250),
+	Category NVARCHAR(20),
+	NoOfCarriages INT
+)

@@ -1,4 +1,4 @@
-﻿CREATE TABLE load.PassangersCount
+﻿CREATE TABLE dbo.PassangersCount
 (
 	Id INT IDENTITY(1,1) PRIMARY KEY,
 	OperatorId INT,

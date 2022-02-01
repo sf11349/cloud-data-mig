@@ -1,0 +1,7 @@
+﻿CREATE TABLE dbo.Station
+(
+	Id INT IDENTITY(1,1) PRIMARY KEY,
+	Code NVARCHAR(10),
+	Name NVARCHAR(250),
+	Region NVARCHAR(20)
+)

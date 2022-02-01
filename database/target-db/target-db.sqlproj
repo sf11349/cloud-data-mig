@@ -3,26 +3,25 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <Name>mig_db</Name>
+    <Name>target_db</Name>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectVersion>4.1</ProjectVersion>
-    <ProjectGuid>{3c9e3fd4-b27e-4d7b-a57e-753fbcd34eb1}</ProjectGuid>
+    <ProjectGuid>{738c4384-0e03-495f-9935-c35d8f0f3dc4}</ProjectGuid>
     <DSP>Microsoft.Data.Tools.Schema.Sql.SqlAzureV12DatabaseSchemaProvider</DSP>
     <OutputType>Database</OutputType>
     <RootPath>
     </RootPath>
-    <RootNamespace>mig_db</RootNamespace>
-    <AssemblyName>mig_db</AssemblyName>
+    <RootNamespace>target_db</RootNamespace>
+    <AssemblyName>target_db</AssemblyName>
     <ModelCollation>1033, CI</ModelCollation>
     <DefaultFileStructure>BySchemaAndSchemaType</DefaultFileStructure>
     <DeployToDatabase>True</DeployToDatabase>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <TargetLanguage>CS</TargetLanguage>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <SqlServerVerification>False</SqlServerVerification>
     <IncludeCompositeObjects>True</IncludeCompositeObjects>
     <TargetDatabaseSet>True</TargetDatabaseSet>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <OutputPath>bin\Release\</OutputPath>
@@ -57,60 +56,21 @@
   <Import Condition="'$(SQLDBExtensionsRefPath)' == ''" Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
   <ItemGroup>
     <Folder Include="Properties" />
+    <Folder Include="dbo" />
+    <Folder Include="dbo\tables" />
     <Folder Include="schemas" />
-    <Folder Include="staging" />
-    <Folder Include="staging\tables" />
-    <Folder Include="transform" />
-    <Folder Include="transform\views" />
-    <Folder Include="adf" />
-    <Folder Include="adf\storedprocs" />
-    <Folder Include="rowmap" />
-    <Folder Include="rowmap\tables" />
-    <Folder Include="adf\views" />
-    <Folder Include="load" />
-    <Folder Include="load\tables" />
-    <Folder Include="transform\storedprocs" />
+    <Folder Include="migdb" />
+    <Folder Include="migdb\storedprocs" />
+    <Folder Include="migdb\tabletypes" />
   </ItemGroup>
   <ItemGroup>
-    <Build Include="schemas\staging.sql" />
-    <Build Include="Schemas\transform.sql" />
-    <Build Include="Schemas\load.sql" />
-    <Build Include="Schemas\adf.sql" />
-    <Build Include="Schemas\rowmap.sql" />
-    <Build Include="staging\tables\trains_list.sql" />
-    <Build Include="staging\tables\operators_list.sql" />
-    <Build Include="staging\tables\stations_list.sql" />
-    <Build Include="staging\tables\passangers_count.sql" />
-    <Build Include="rowmap\tables\operator.sql" />
-    <Build Include="rowmap\tables\station.sql" />
-    <Build Include="rowmap\tables\train.sql" />
-    <Build Include="load\tables\Station.sql" />
-    <Build Include="load\tables\Operator.sql" />
-    <Build Include="load\tables\Train.sql" />
-    <Build Include="load\tables\PassangersCount.sql" />
-    <Build Include="staging\tables\services_list.sql" />
-    <Build Include="rowmap\tables\service.sql" />
-    <Build Include="load\tables\Service.sql" />
-    <Build Include="adf\storedprocs\getTableList.sql" />
-    <Build Include="adf\storedprocs\trancateMigDb.sql" />
-    <Build Include="transform\storedprocs\mergeOperator.sql" />
-    <Build Include="transform\views\Operator.sql" />
-    <Build Include="adf\storedprocs\mergeOperator.sql" />
-    <Build Include="transform\views\Service.sql" />
-    <Build Include="transform\storedprocs\mergeService.sql" />
-    <Build Include="adf\storedprocs\mergeService.sql" />
-    <Build Include="transform\views\Station.sql" />
-    <Build Include="adf\storedprocs\mergeStation.sql" />
-    <Build Include="transform\storedprocs\mergeStation.sql" />
-    <Build Include="transform\views\station_raw.sql" />
-    <Build Include="transform\views\train_raw.sql" />
-    <Build Include="transform\storedprocs\mergeTrain.sql" />
-    <Build Include="transform\views\Train.sql" />
-    <Build Include="adf\storedprocs\mergeTrain.sql" />
-    <Build Include="transform\views\operator_raw.sql" />
-    <Build Include="transform\views\service_raw.sql" />
-    <Build Include="transform\views\PassangersCount.sql" />
-    <Build Include="transform\storedprocs\mergePassangersCount.sql" />
-    <Build Include="adf\storedprocs\mergePassangersCount.sql" />
+    <Build Include="dbo\tables\Operator.sql" />
+    <Build Include="dbo\tables\PassangersCount.sql" />
+    <Build Include="dbo\tables\Service.sql" />
+    <Build Include="dbo\tables\Station.sql" />
+    <Build Include="dbo\tables\Train.sql" />
+    <Build Include="schemas\migdb.sql" />
+    <Build Include="migdb\storedprocs\mergeOperator.sql" />
+    <Build Include="migdb\tabletypes\OperatorTableType.sql" />
   </ItemGroup>
 </Project>
