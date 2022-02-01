@@ -4,13 +4,53 @@
 		"description": "Child Pipeline",
 		"activities": [
 			{
-				"name": "Wait1",
-				"type": "Wait",
+				"name": "merge_Operator",
+				"type": "Copy",
 				"dependsOn": [],
+				"policy": {
+					"timeout": "0.00:10:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
 				"userProperties": [],
 				"typeProperties": {
-					"waitTimeInSeconds": 1
-				}
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "SELECT * FROM load.Operator",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"sink": {
+						"type": "AzureSqlSink",
+						"sqlWriterStoredProcedureName": "[migdb].[mergeOperator]",
+						"sqlWriterTableType": "migdb.OperatorTableType",
+						"storedProcedureTableTypeParameterName": "SourceTable",
+						"disableMetricsCollection": false
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "ds_db_mig_query",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "ds_db_target_query",
+						"type": "DatasetReference"
+					}
+				]
 			}
 		],
 		"parameters": {
