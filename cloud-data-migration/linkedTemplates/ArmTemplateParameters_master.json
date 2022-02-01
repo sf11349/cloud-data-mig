@@ -8,6 +8,9 @@
 		"ls_db_mig_connectionString": {
 			"value": ""
 		},
+		"ls_db_target_connectionString": {
+			"value": ""
+		},
 		"ls_storage_mig_connectionString": {
 			"value": ""
 		},

@@ -11,6 +11,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'ls_db_mig'"
 		},
+		"ls_db_target_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'ls_db_target'"
+		},
 		"ls_storage_mig_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'ls_storage_mig'"
@@ -44,6 +48,9 @@
 					},
 					"ls_db_mig_connectionString": {
 						"value": "[parameters('ls_db_mig_connectionString')]"
+					},
+					"ls_db_target_connectionString": {
+						"value": "[parameters('ls_db_target_connectionString')]"
 					},
 					"ls_storage_mig_connectionString": {
 						"value": "[parameters('ls_storage_mig_connectionString')]"
